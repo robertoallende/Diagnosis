@@ -19,7 +19,7 @@ public class ToddsDiagnosis implements Serializable {
             plan = new ArrayList<Answer>();
     }
 
-    public void addQuestion(Question question) {
+    public void addQuestion(BinaryQuestion question) {
         Answer answer = new Answer(question);
         plan.add(answer);
     }
@@ -55,5 +55,19 @@ public class ToddsDiagnosis implements Serializable {
 
         return (total / plan.size()) * 100;
     }
+
+    public Answer getNextUnanswered(){
+        Answer result = null;
+
+        for (Answer a: plan) {
+            if (a.getAnswerValue() == -1){
+                result = a;
+                break;
+            }
+        }
+
+        return result;
+    }
+
 
 }

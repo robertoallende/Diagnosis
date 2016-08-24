@@ -1,5 +1,6 @@
 package com.robertoallende.diagnosis.model;
 
+import com.robertoallende.Answer;
 import com.robertoallende.BinaryQuestion;
 import com.robertoallende.ToddsDiagnosis;
 
@@ -16,4 +17,9 @@ public class DiagnosisPlan {
         plan.addQuestion(new BinaryQuestion("Have you used hallucinogenic drugs ?", "Yes", "No", 1));
 
     }
+
+    public Answer getNextUnanswered() {
+        return plan.getNextUnanswered();
+    }
+
 }

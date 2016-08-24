@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.robertoallende.Answer;
 import com.robertoallende.diagnosis.R;
 import com.robertoallende.diagnosis.controller.DiagnosisController;
 import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
@@ -54,7 +55,6 @@ public class DiagnosisActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -92,7 +92,9 @@ public class DiagnosisActivity extends AppCompatActivity {
     }
 
     public void startQuestionActivity() {
-        Intent intent = new Intent(this, BinaryQuestionActivity.class);
+        Answer answer = mPlan.getNextUnanswered();
+
+        Intent intent = BinaryQuestionActivity.makeIntent(this, answer);
         startActivityForResult(intent, BINARY_QUESTION);
     }
 

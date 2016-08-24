@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 public class Answer implements Serializable {
 
-    private Question question;
+    private BinaryQuestion question;
     private int answerValue;
 
-    public Answer(Question question) {
+    public Answer(BinaryQuestion question) {
         this.question = question;
-        this.answerValue = 0;
+        this.answerValue = -1;
     }
 
-    public Question getQuestion() {
+    public BinaryQuestion getQuestion() {
         return question;
     }
 
-    public void setQuestion(Question question) {
+    public void setQuestion(BinaryQuestion question) {
         this.question = question;
     }
 
