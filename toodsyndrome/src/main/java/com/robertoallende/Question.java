@@ -4,22 +4,12 @@ import java.io.Serializable;
 
 public abstract class Question implements Serializable {
 
-    private int id;
     private String questionText;
     private int weight;
 
-    public Question(int id, String questionText, int weight) {
-        this.id = id;
+    public Question(String questionText, int weight) {
         this.questionText = questionText;
         this.weight = weight;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getQuestionText() {

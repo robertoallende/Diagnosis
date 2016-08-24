@@ -1,9 +1,10 @@
 package com.robertoallende;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToddsDiagnosis {
+public class ToddsDiagnosis implements Serializable {
 
     /* ToddsDiagnosis represents a set of questions and answers.
        This class allows:

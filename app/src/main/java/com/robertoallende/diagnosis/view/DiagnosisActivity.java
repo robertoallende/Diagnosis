@@ -11,15 +11,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.robertoallende.diagnosis.R;
+import com.robertoallende.diagnosis.controller.DiagnosisController;
+import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
+import com.robertoallende.diagnosis.model.DiagnosisPlan;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class DiagnosisActivity extends AppCompatActivity {
 
     private static final int BINARY_QUESTION = 1;
 
+    private DiagnosisPlan mPlan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diagnosis);
+        setViewItems();
+        EventBus.getDefault().register(this);
+    }
+
+    public void setViewItems() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -31,7 +44,16 @@ public class DiagnosisActivity extends AppCompatActivity {
 
             }
         });
+
+        if (mPlan == null) {
+            DiagnosisController controller = DiagnosisController.getInstance(this);
+            controller.getDiagnosisPlan();
+        } else {
+            fab.setEnabled(true);
+        }
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,5 +100,31 @@ public class DiagnosisActivity extends AppCompatActivity {
         Snackbar.make(view, text, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
+
+
+    @Subscribe
+    public void onEvent(GetDiagnosisPlanEvent planEvent) {
+        if (planEvent.isSuccess()) {
+            mPlan = planEvent.getDiagnosisPlan();
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setEnabled(true);
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (! EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
 
 }
