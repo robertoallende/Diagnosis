@@ -1,23 +1,19 @@
 package com.robertoallende.diagnosis.events;
 
-import com.robertoallende.diagnosis.model.DiagnosisPlan;
+import com.robertoallende.diagnosis.model.DiagnosisPlanModel;
 
-public class GetDiagnosisPlanEvent {
+public class GetDiagnosisPlanEvent extends DiagnosisEvent {
 
-    Boolean success;
-    DiagnosisPlan diagnosisPlan;
+    DiagnosisPlanModel diagnosisPlanModel;
 
-    public GetDiagnosisPlanEvent(Boolean success, DiagnosisPlan diagnosisPlan) {
-        this.success = success;
-        this.diagnosisPlan = diagnosisPlan;
+    public GetDiagnosisPlanEvent(Boolean success, DiagnosisPlanModel diagnosisPlanModel) {
+        super(success);
+        this.diagnosisPlanModel = diagnosisPlanModel;
     }
 
-    public DiagnosisPlan getDiagnosisPlan() {
-        return diagnosisPlan;
+    public DiagnosisPlanModel getDiagnosisPlanModel() {
+        return diagnosisPlanModel;
     }
 
-    public Boolean isSuccess(){
-        return success;
-    }
 
 }

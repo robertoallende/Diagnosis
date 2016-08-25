@@ -1,14 +1,10 @@
 package com.robertoallende.diagnosis.events;
 
-public class SaveDiagnosisEvent {
-
-    Boolean success;
+public class SaveDiagnosisEvent extends DiagnosisEvent{
 
     public SaveDiagnosisEvent(Boolean success) {
+        super(success);
         this.success = success;
     }
 
-    public Boolean isSuccess(){
-        return success;
-    }
 }

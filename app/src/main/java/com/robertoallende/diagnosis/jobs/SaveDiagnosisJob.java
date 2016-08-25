@@ -1,9 +1,8 @@
 package com.robertoallende.diagnosis.jobs;
 
 import com.robertoallende.DiagnosisResult;
-import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
 import com.robertoallende.diagnosis.events.SaveDiagnosisEvent;
-import com.robertoallende.diagnosis.model.DiagnosisPlan;
+import com.robertoallende.diagnosis.model.DiagnosisPlanModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,7 +17,7 @@ public class SaveDiagnosisJob extends DiagnosisApplicationJob {
 
     @Override
     public void onRun() throws Throwable {
-        DiagnosisPlan plan = new DiagnosisPlan();
+        DiagnosisPlanModel plan = new DiagnosisPlanModel();
         EventBus.getDefault().post(new SaveDiagnosisEvent(true));
     }
 }

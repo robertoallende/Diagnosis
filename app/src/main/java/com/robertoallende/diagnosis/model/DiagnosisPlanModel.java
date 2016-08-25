@@ -4,11 +4,11 @@ import com.robertoallende.BinaryAnswer;
 import com.robertoallende.BinaryQuestion;
 import com.robertoallende.ToddsDiagnosis;
 
-public class DiagnosisPlan {
+public class DiagnosisPlanModel {
 
     ToddsDiagnosis plan;
 
-    public DiagnosisPlan() {
+    public DiagnosisPlanModel() {
         this.plan = new ToddsDiagnosis();
 
         plan.addQuestion(new BinaryQuestion("Have you migraines ?", "Yes", "No", 1));

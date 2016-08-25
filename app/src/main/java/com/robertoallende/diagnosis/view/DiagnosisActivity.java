@@ -1,17 +1,13 @@
 package com.robertoallende.diagnosis.view;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.robertoallende.BinaryAnswer;
 import com.robertoallende.DiagnosisResult;
@@ -19,8 +15,9 @@ import com.robertoallende.diagnosis.R;
 import com.robertoallende.diagnosis.common.RecyclerViewActivity;
 import com.robertoallende.diagnosis.controller.DiagnosisController;
 import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
+import com.robertoallende.diagnosis.events.GetDiagnosisResultEvent;
 import com.robertoallende.diagnosis.events.SaveDiagnosisEvent;
-import com.robertoallende.diagnosis.model.DiagnosisPlan;
+import com.robertoallende.diagnosis.model.DiagnosisPlanModel;
 import com.robertoallende.diagnosis.view.adapter.DiagnosisResultAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,7 +31,7 @@ public class DiagnosisActivity extends RecyclerViewActivity {
     private static final int BINARY_QUESTION = 1;
     private RecyclerView mDiagnosisResultView;
 
-    private DiagnosisPlan mPlan;
+    private DiagnosisPlanModel mPlan;
     private List<DiagnosisResult> mDiagnosisResultList;
 
 
@@ -61,12 +58,16 @@ public class DiagnosisActivity extends RecyclerViewActivity {
             }
         });
 
-        getDiagnosisPlan();
+        initRecyclerView();
 
-        mDiagnosisResultView = (RecyclerView) findViewById(R.id.content_diagnosis_list_layout);
-        setLayoutManager(new LinearLayoutManager(this));
-        final DiagnosisResultAdapter diagnosisAdapter = new DiagnosisResultAdapter(this);
-        setAdapter(diagnosisAdapter);
+        getDiagnosisPlan();
+        updateDiagnosisResult();
+
+        // mDiagnosisResultView = (RecyclerView) findViewById(R.id.content_diagnosis_list_layout);
+        // setLayoutManager(new LinearLayoutManager(this));
+        // final DiagnosisResultAdapter diagnosisAdapter = new DiagnosisResultAdapter(this);
+        // setAdapter(diagnosisAdapter);
+
     }
 
     public void getDiagnosisPlan() {
@@ -79,20 +80,39 @@ public class DiagnosisActivity extends RecyclerViewActivity {
         }
     }
 
+    public void getDiagnosisResults() {
+        DiagnosisController controller = DiagnosisController.getInstance(this);
+        controller.getDiagnosisResult();
+    }
+
+
     public void cleanDiagnosis() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setEnabled(false);
         mPlan = null;
     }
 
+    public void initRecyclerView() {
+        mDiagnosisResultView = (RecyclerView) findViewById(R.id.content_diagnosis_list_layout);
+        setLayoutManager(new LinearLayoutManager(this));
+        final DiagnosisResultAdapter diagnosisAdapter = new DiagnosisResultAdapter(this);
+        setAdapter(diagnosisAdapter);
+    }
+
 
     public void updateDiagnosisResult() {
         //Drawable divider = getDrawable(R.drawable.party_divider);
         //getRecyclerView().addItemDecoration(new HorizontalDividerItemDecoration(divider));
-        setLayoutManager(new LinearLayoutManager(this));
-        DiagnosisResultAdapter partyAdapter = new DiagnosisResultAdapter(this);
-        partyAdapter.replaceList(mDiagnosisResultList);
-        setAdapter(partyAdapter);
+
+
+        if (mDiagnosisResultList != null) {
+            final DiagnosisResultAdapter diagnosisAdapter = (DiagnosisResultAdapter) mDiagnosisResultView.getAdapter();
+            diagnosisAdapter.replaceList(mDiagnosisResultList);
+        }
+
+        // setLayoutManager(new LinearLayoutManager(this));
+        // DiagnosisResultAdapter partyAdapter = new DiagnosisResultAdapter(this);
+        //setAdapter(partyAdapter);
     }
 
 
@@ -118,6 +138,9 @@ public class DiagnosisActivity extends RecyclerViewActivity {
 
         DiagnosisResult diagnosisResult = new DiagnosisResult(System.currentTimeMillis(), diagnosis);
         mDiagnosisResultList.add(diagnosisResult);
+
+        DiagnosisController controller = DiagnosisController.getInstance(this);
+        controller.saveDiagnosisResult(mDiagnosisResultList);
         updateDiagnosisResult();
 
         startActivity(intent);
@@ -145,10 +168,19 @@ public class DiagnosisActivity extends RecyclerViewActivity {
     @Subscribe
     public void onEvent(GetDiagnosisPlanEvent planEvent) {
         if (planEvent.isSuccess()) {
-            mPlan = planEvent.getDiagnosisPlan();
+            mPlan = planEvent.getDiagnosisPlanModel();
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setEnabled(true);
+        }
+        getDiagnosisResults();
+    }
+
+    @Subscribe
+    public void onEvent(GetDiagnosisResultEvent resultEvent) {
+        if (resultEvent.isSuccess() && resultEvent.getDiagnosisResult() != null) {
+            mDiagnosisResultList = resultEvent.getDiagnosisResult();
+            updateDiagnosisResult();
         }
     }
 

@@ -8,13 +8,15 @@ import com.robertoallende.diagnosis.DiagnosisApplication;
 public class Controller {
 
     protected JobManager mJobManager;
+    private Context mContext;
 
     public Controller(Context context) {
-        // Backendless.initApp(context, PartyPlannerConfig.BACKENDLESS_APP_ID,
-        //        PartyPlannerConfig.BACKENDLESS_SECRET_KEY,
-        //        context.getResources().getString(R.string.backendless_app_version));
-
+        mContext = context;
         mJobManager = DiagnosisApplication.getInstance().getJobManager();
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
 }

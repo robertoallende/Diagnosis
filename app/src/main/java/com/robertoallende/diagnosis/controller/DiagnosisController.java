@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.robertoallende.DiagnosisResult;
 import com.robertoallende.diagnosis.jobs.GetDiagnosisPlanJob;
+import com.robertoallende.diagnosis.jobs.GetDiagnosisResultJob;
 import com.robertoallende.diagnosis.jobs.SaveDiagnosisJob;
-import com.robertoallende.diagnosis.model.DiagnosisPlan;
+import com.robertoallende.diagnosis.jobs.SaveDiagnosisResultJob;
+import com.robertoallende.diagnosis.model.DiagnosisPlanModel;
 
-import java.util.Date;
+import java.util.List;
 
 public class DiagnosisController extends Controller {
 
@@ -28,10 +30,19 @@ public class DiagnosisController extends Controller {
         mJobManager.addJobInBackground(new GetDiagnosisPlanJob());
     }
 
-    public void saveDiagnosis(DiagnosisPlan mPlan){
+    public void saveDiagnosis(DiagnosisPlanModel mPlan){
         long millis = System.currentTimeMillis();
         DiagnosisResult diagnosis = new DiagnosisResult(millis, mPlan.getProbability());
         mJobManager.addJobInBackground(new SaveDiagnosisJob(diagnosis));
     }
+
+    public void getDiagnosisResult() {
+        mJobManager.addJobInBackground(new GetDiagnosisResultJob(getContext()));
+    }
+
+    public void saveDiagnosisResult(List<DiagnosisResult> diagnosisResult) {
+        mJobManager.addJobInBackground(new SaveDiagnosisResultJob(getContext(), diagnosisResult));
+    }
+
 
 }
