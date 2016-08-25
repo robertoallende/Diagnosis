@@ -13,15 +13,15 @@ public class ToddsDiagnosis implements Serializable {
          Calculate the result of the diagnosis.
      */
 
-    private List<Answer> plan;
+    private List<BinaryAnswer> plan;
 
     public ToddsDiagnosis() {
-            plan = new ArrayList<Answer>();
+            plan = new ArrayList<BinaryAnswer>();
     }
 
     public void addQuestion(BinaryQuestion question) {
-        Answer answer = new Answer(question);
-        plan.add(answer);
+        BinaryAnswer binaryAnswer = new BinaryAnswer(question);
+        plan.add(binaryAnswer);
     }
 
     public Question getQuestion(int i) {
@@ -33,9 +33,9 @@ public class ToddsDiagnosis implements Serializable {
         }
     }
 
-    public void setAnswer(int i, Answer answer) {
-        if (i < plan.size() && answer != null) {
-            plan.set(i, answer);
+    public void setAnswer(int i, BinaryAnswer binaryAnswer) {
+        if (i < plan.size() && binaryAnswer != null) {
+            plan.set(i, binaryAnswer);
         } else {
             throw new ArrayIndexOutOfBoundsException("Trying to set a non existing answer.");
         }
@@ -45,8 +45,8 @@ public class ToddsDiagnosis implements Serializable {
 
         int total = 0;
 
-        for (Answer answer: plan) {
-            total += answer.getAnswerValue();
+        for (BinaryAnswer binaryAnswer : plan) {
+            total += binaryAnswer.getAnswerValue();
         }
 
         if (plan.size() == 0) {
@@ -56,10 +56,10 @@ public class ToddsDiagnosis implements Serializable {
         return (total / plan.size()) * 100;
     }
 
-    public Answer getNextUnanswered(){
-        Answer result = null;
+    public BinaryAnswer getNextUnanswered(){
+        BinaryAnswer result = null;
 
-        for (Answer a: plan) {
+        for (BinaryAnswer a: plan) {
             if (a.getAnswerValue() == -1){
                 result = a;
                 break;
@@ -70,4 +70,15 @@ public class ToddsDiagnosis implements Serializable {
     }
 
 
+    public void saveUnansweredAnswer(BinaryAnswer binaryAnswer) {
+
+        for (int i = 0; i < plan.size() ; i++) {
+            if (plan.get(i).getAnswerValue() == -1){
+                // TODO: check the answer is the same
+                plan.get(i).setAnswerValue(binaryAnswer.getAnswerValue());
+                break;
+            }
+        }
+        return;
+    }
 }

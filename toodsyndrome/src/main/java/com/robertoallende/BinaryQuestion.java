@@ -27,4 +27,5 @@ public class BinaryQuestion extends Question {
     public void setNegativeText(String negativeText) {
         this.negativeText = negativeText;
     }
+
 }

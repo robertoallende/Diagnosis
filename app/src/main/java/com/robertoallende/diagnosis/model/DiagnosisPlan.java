@@ -1,6 +1,6 @@
 package com.robertoallende.diagnosis.model;
 
-import com.robertoallende.Answer;
+import com.robertoallende.BinaryAnswer;
 import com.robertoallende.BinaryQuestion;
 import com.robertoallende.ToddsDiagnosis;
 
@@ -18,8 +18,12 @@ public class DiagnosisPlan {
 
     }
 
-    public Answer getNextUnanswered() {
+    public BinaryAnswer getNextUnanswered() {
         return plan.getNextUnanswered();
     }
 
+    public void saveAnswer(BinaryAnswer binaryAnswer) {
+
+        plan.saveUnansweredAnswer(binaryAnswer);
+    }
 }

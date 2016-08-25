@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.robertoallende.Answer;
+import com.robertoallende.BinaryAnswer;
 import com.robertoallende.diagnosis.R;
 import com.robertoallende.diagnosis.controller.DiagnosisController;
 import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
@@ -52,7 +52,6 @@ public class DiagnosisActivity extends AppCompatActivity {
         } else {
             fab.setEnabled(true);
         }
-
     }
 
     @Override
@@ -81,7 +80,13 @@ public class DiagnosisActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BINARY_QUESTION) {
             if (resultCode == RESULT_OK) {
-                startResultActivity();
+
+                BinaryAnswer binaryAnswer =
+                        (BinaryAnswer) data.getExtras().get(BinaryQuestionActivity.ANSWER);
+                mPlan.saveAnswer(binaryAnswer);
+
+                startQuestionActivity();
+
             }
         }
     }
@@ -92,17 +97,21 @@ public class DiagnosisActivity extends AppCompatActivity {
     }
 
     public void startQuestionActivity() {
-        Answer answer = mPlan.getNextUnanswered();
 
-        Intent intent = BinaryQuestionActivity.makeIntent(this, answer);
-        startActivityForResult(intent, BINARY_QUESTION);
+        BinaryAnswer nextbinaryAnswer = mPlan.getNextUnanswered();
+
+        if (nextbinaryAnswer == null) {
+            startResultActivity();
+        } else {
+            Intent intent = BinaryQuestionActivity.makeIntent(this, nextbinaryAnswer);
+            startActivityForResult(intent, BINARY_QUESTION);
+        }
     }
 
     public void showSnackBar(View view, String text){
         Snackbar.make(view, text, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
 
     @Subscribe
     public void onEvent(GetDiagnosisPlanEvent planEvent) {

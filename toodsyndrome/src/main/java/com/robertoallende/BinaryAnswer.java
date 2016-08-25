@@ -2,12 +2,12 @@ package com.robertoallende;
 
 import java.io.Serializable;
 
-public class Answer implements Serializable {
+public class BinaryAnswer implements Serializable {
 
     private BinaryQuestion question;
     private int answerValue;
 
-    public Answer(BinaryQuestion question) {
+    public BinaryAnswer(BinaryQuestion question) {
         this.question = question;
         this.answerValue = -1;
     }
@@ -27,4 +27,13 @@ public class Answer implements Serializable {
     public void setAnswerValue(int answer) {
         this.answerValue = answer;
     }
+
+    public void setNegativeResult() {
+        this.answerValue = 0;
+    }
+
+    public void setPositiveResult() {
+        this.answerValue = 1;
+    }
+
 }

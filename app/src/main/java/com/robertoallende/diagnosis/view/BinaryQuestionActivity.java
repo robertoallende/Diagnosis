@@ -8,17 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.robertoallende.Answer;
+import com.robertoallende.BinaryAnswer;
 import com.robertoallende.diagnosis.R;
 
 public class BinaryQuestionActivity extends AppCompatActivity {
 
-    public static final String CHOICE = "choice";
     public static final String ANSWER = "answer";
+    private BinaryAnswer mBinaryAnswer;
 
-    public static Intent makeIntent(Context context, Answer answer) {
+    public static Intent makeIntent(Context context, BinaryAnswer binaryAnswer) {
         Intent intent = new Intent(context, BinaryQuestionActivity.class);
-        intent.putExtra(ANSWER, answer);
+        intent.putExtra(ANSWER, binaryAnswer);
         return intent;
     }
 
@@ -34,9 +34,10 @@ public class BinaryQuestionActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mBinaryAnswer.setPositiveResult();
                 Intent intent = new Intent();
-                intent.putExtra(CHOICE, 1);
-                setResult(RESULT_OK);
+                intent.putExtra(ANSWER, mBinaryAnswer);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -45,9 +46,10 @@ public class BinaryQuestionActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mBinaryAnswer.setNegativeResult();
                 Intent intent = new Intent();
-                intent.putExtra(CHOICE, 2);
-                setResult(RESULT_OK);
+                intent.putExtra(ANSWER, mBinaryAnswer);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -57,11 +59,10 @@ public class BinaryQuestionActivity extends AppCompatActivity {
         Button choice_2 = (Button) findViewById(R.id.choice_2);
 
         Intent intent = getIntent();
-        Answer answer = (Answer) intent.getExtras().get(ANSWER);
-        question_label.setText(answer.getQuestion().getQuestionText());
-        choice_1.setText(answer.getQuestion().getPostiveText());
-        choice_2.setText(answer.getQuestion().getNegativeText());
+        mBinaryAnswer = (BinaryAnswer) intent.getExtras().get(ANSWER);
+        question_label.setText(mBinaryAnswer.getQuestion().getQuestionText());
+        choice_1.setText(mBinaryAnswer.getQuestion().getPostiveText());
+        choice_2.setText(mBinaryAnswer.getQuestion().getNegativeText());
 
     }
-
 }
