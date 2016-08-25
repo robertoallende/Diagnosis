@@ -41,7 +41,7 @@ public class ToddsDiagnosis implements Serializable {
         }
     }
 
-    public int getProbability(){
+    public float getProbability(){
 
         int total = 0;
 
@@ -53,7 +53,7 @@ public class ToddsDiagnosis implements Serializable {
             return 0;
         }
 
-        return (total / plan.size()) * 100;
+        return (total / (float) plan.size() )  * 100;
     }
 
     public BinaryAnswer getNextUnanswered(){

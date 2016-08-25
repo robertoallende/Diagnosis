@@ -14,6 +14,7 @@ import com.robertoallende.BinaryAnswer;
 import com.robertoallende.diagnosis.R;
 import com.robertoallende.diagnosis.controller.DiagnosisController;
 import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
+import com.robertoallende.diagnosis.events.SaveDiagnosisEvent;
 import com.robertoallende.diagnosis.model.DiagnosisPlan;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,12 +47,23 @@ public class DiagnosisActivity extends AppCompatActivity {
             }
         });
 
+        getDiagnosisPlan();
+    }
+
+    public void getDiagnosisPlan() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (mPlan == null) {
             DiagnosisController controller = DiagnosisController.getInstance(this);
             controller.getDiagnosisPlan();
         } else {
             fab.setEnabled(true);
         }
+    }
+
+    public void cleanDiagnosis() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setEnabled(false);
+        mPlan = null;
     }
 
     @Override
@@ -92,8 +104,9 @@ public class DiagnosisActivity extends AppCompatActivity {
     }
 
     public void startResultActivity() {
-        int diagnosis = mPlan.getProbability();
+        float diagnosis = mPlan.getProbability();
         Intent intent = ResultActivity.makeIntent(this, diagnosis);
+        cleanDiagnosis();
         startActivity(intent);
     }
 
@@ -102,6 +115,8 @@ public class DiagnosisActivity extends AppCompatActivity {
         BinaryAnswer nextbinaryAnswer = mPlan.getNextUnanswered();
 
         if (nextbinaryAnswer == null) {
+            DiagnosisController controller = DiagnosisController.getInstance(this);
+            controller.saveDiagnosis(mPlan);
             startResultActivity();
         } else {
             Intent intent = BinaryQuestionActivity.makeIntent(this, nextbinaryAnswer);
@@ -124,6 +139,13 @@ public class DiagnosisActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe
+    public void onEvent(SaveDiagnosisEvent saveEvent) {
+        if (saveEvent.isSuccess() && mPlan == null) {
+            getDiagnosisPlan();
+        }
+    }
+
     @Override
     protected void onPause(){
         super.onPause();
@@ -136,6 +158,7 @@ public class DiagnosisActivity extends AppCompatActivity {
         if (! EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        getDiagnosisPlan();
     }
 
 

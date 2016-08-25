@@ -15,7 +15,7 @@ public class ResultActivity extends AppCompatActivity {
 
     public static final String RESULT = "result";
 
-    public static Intent makeIntent(Context context, int diagnosis) {
+    public static Intent makeIntent(Context context, float diagnosis) {
         Intent intent = new Intent(context, ResultActivity.class);
         intent.putExtra(RESULT, diagnosis);
         return intent;
@@ -38,7 +38,7 @@ public class ResultActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        int diagnosis = (int) intent.getExtras().get(RESULT);
+        float diagnosis = (float) intent.getExtras().get(RESULT);
         TextView result_label = (TextView) findViewById(R.id.result_label);
         result_label.setText(String.valueOf(diagnosis) + "%");
     }

@@ -26,7 +26,7 @@ public class DiagnosisPlan {
         plan.saveUnansweredAnswer(binaryAnswer);
     }
 
-    public int getProbability() {
+    public float getProbability() {
         return plan.getProbability();
     }
 }

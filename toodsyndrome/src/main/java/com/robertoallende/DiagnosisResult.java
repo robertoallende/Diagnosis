@@ -1,15 +1,15 @@
 package com.robertoallende;
 
-public class PreviousDiagnosis {
+public class DiagnosisResult {
 
     private long diagnosisDate;
-    private int value;
+    private float value;
 
-    public PreviousDiagnosis() {
+    public DiagnosisResult() {
 
     }
 
-    public PreviousDiagnosis(long diagnosisDate, int value) {
+    public DiagnosisResult(long diagnosisDate, float value) {
         this.diagnosisDate = diagnosisDate;
         this.value = value;
     }
@@ -22,7 +22,7 @@ public class PreviousDiagnosis {
         this.diagnosisDate = diagnosisDate;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 
