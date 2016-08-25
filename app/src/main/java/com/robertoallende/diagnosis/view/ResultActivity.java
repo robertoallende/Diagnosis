@@ -1,14 +1,25 @@
 package com.robertoallende.diagnosis.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.robertoallende.BinaryAnswer;
 import com.robertoallende.diagnosis.R;
 
 public class ResultActivity extends AppCompatActivity {
+
+    public static final String RESULT = "result";
+
+    public static Intent makeIntent(Context context, int diagnosis) {
+        Intent intent = new Intent(context, ResultActivity.class);
+        intent.putExtra(RESULT, diagnosis);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +36,11 @@ public class ResultActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Intent intent = getIntent();
+        int diagnosis = (int) intent.getExtras().get(RESULT);
+        TextView result_label = (TextView) findViewById(R.id.result_label);
+        result_label.setText(String.valueOf(diagnosis) + "%");
     }
 
 }

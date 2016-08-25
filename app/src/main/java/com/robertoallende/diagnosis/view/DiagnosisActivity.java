@@ -92,7 +92,8 @@ public class DiagnosisActivity extends AppCompatActivity {
     }
 
     public void startResultActivity() {
-        Intent intent = new Intent(this, ResultActivity.class);
+        int diagnosis = mPlan.getProbability();
+        Intent intent = ResultActivity.makeIntent(this, diagnosis);
         startActivity(intent);
     }
 
