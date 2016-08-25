@@ -3,28 +3,35 @@ package com.robertoallende.diagnosis.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.robertoallende.DiagnosisResult;
 import com.robertoallende.diagnosis.R;
+import com.robertoallende.diagnosis.common.RecyclerViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DiagnosisResultAdapter extends RecyclerView.Adapter<DiagnosisResultRowHolder> {
 
-    Context mContext;
+    RecyclerViewActivity mContext;
     List<DiagnosisResult> mDiagnosisResult = new ArrayList<>();
 
-    public DiagnosisResultAdapter(Context context) {
+    public DiagnosisResultAdapter(RecyclerViewActivity context) {
         mContext = context;
     }
 
     public void replaceList(final List<DiagnosisResult> diagnosisList) {
-        mDiagnosisResult.clear();
-        mDiagnosisResult.addAll(diagnosisList);
-        notifyDataSetChanged();
+        try {
+            mDiagnosisResult.clear();
+            mContext.getRecyclerView().getRecycledViewPool().clear();
+            mDiagnosisResult.addAll(diagnosisList);
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.v("Diagnosis", e.getMessage());
+        }
     }
 
     @Override

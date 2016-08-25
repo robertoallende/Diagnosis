@@ -26,8 +26,19 @@ public class DiagnosisTest {
         onView(withId(R.id.fab)).perform(click());
         onView(withId(R.id.question_activity)).check(matches(isDisplayed()));
         onView(withId(R.id.choice_1)).perform(click());
+
+        onView(withId(R.id.question_activity)).check(matches(isDisplayed()));
+        onView(withId(R.id.choice_2)).perform(click());
+
+        onView(withId(R.id.question_activity)).check(matches(isDisplayed()));
+        onView(withId(R.id.choice_1)).perform(click());
+
+        onView(withId(R.id.question_activity)).check(matches(isDisplayed()));
+        onView(withId(R.id.choice_1)).perform(click());
+
         onView(withId(R.id.result_activity)).check(matches(isDisplayed()));
         onView(withId(R.id.close_result)).perform(click());
+
         onView(withId(R.id.diagnosis_activity)).check(matches(isDisplayed()));
 
 

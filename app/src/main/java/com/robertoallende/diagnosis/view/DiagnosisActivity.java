@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.robertoallende.BinaryAnswer;
@@ -59,15 +60,7 @@ public class DiagnosisActivity extends RecyclerViewActivity {
         });
 
         initRecyclerView();
-
-        getDiagnosisPlan();
         updateDiagnosisResult();
-
-        // mDiagnosisResultView = (RecyclerView) findViewById(R.id.content_diagnosis_list_layout);
-        // setLayoutManager(new LinearLayoutManager(this));
-        // final DiagnosisResultAdapter diagnosisAdapter = new DiagnosisResultAdapter(this);
-        // setAdapter(diagnosisAdapter);
-
     }
 
     public void getDiagnosisPlan() {
@@ -101,18 +94,17 @@ public class DiagnosisActivity extends RecyclerViewActivity {
 
 
     public void updateDiagnosisResult() {
-        //Drawable divider = getDrawable(R.drawable.party_divider);
-        //getRecyclerView().addItemDecoration(new HorizontalDividerItemDecoration(divider));
-
 
         if (mDiagnosisResultList != null) {
             final DiagnosisResultAdapter diagnosisAdapter = (DiagnosisResultAdapter) mDiagnosisResultView.getAdapter();
-            diagnosisAdapter.replaceList(mDiagnosisResultList);
+            try {
+                diagnosisAdapter.replaceList(mDiagnosisResultList);
+            } catch (Exception e) {
+                Log.v("Diagnossis", e.getMessage());
+            }
+
         }
 
-        // setLayoutManager(new LinearLayoutManager(this));
-        // DiagnosisResultAdapter partyAdapter = new DiagnosisResultAdapter(this);
-        //setAdapter(partyAdapter);
     }
 
 
@@ -148,6 +140,9 @@ public class DiagnosisActivity extends RecyclerViewActivity {
 
     public void startQuestionActivity() {
 
+        if (mPlan == null) {
+            return;
+        }
         BinaryAnswer nextbinaryAnswer = mPlan.getNextUnanswered();
 
         if (nextbinaryAnswer == null) {
