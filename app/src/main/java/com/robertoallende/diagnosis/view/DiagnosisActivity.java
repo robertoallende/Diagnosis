@@ -1,30 +1,42 @@
 package com.robertoallende.diagnosis.view;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.robertoallende.BinaryAnswer;
+import com.robertoallende.DiagnosisResult;
 import com.robertoallende.diagnosis.R;
+import com.robertoallende.diagnosis.common.RecyclerViewActivity;
 import com.robertoallende.diagnosis.controller.DiagnosisController;
 import com.robertoallende.diagnosis.events.GetDiagnosisPlanEvent;
 import com.robertoallende.diagnosis.events.SaveDiagnosisEvent;
 import com.robertoallende.diagnosis.model.DiagnosisPlan;
+import com.robertoallende.diagnosis.view.adapter.DiagnosisResultAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class DiagnosisActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class DiagnosisActivity extends RecyclerViewActivity {
 
     private static final int BINARY_QUESTION = 1;
+    private RecyclerView mDiagnosisResultView;
 
     private DiagnosisPlan mPlan;
+    private List<DiagnosisResult> mDiagnosisResultList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +44,8 @@ public class DiagnosisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_diagnosis);
         setViewItems();
         EventBus.getDefault().register(this);
+
+        mDiagnosisResultList = new ArrayList<DiagnosisResult>();
     }
 
     public void setViewItems() {
@@ -48,6 +62,11 @@ public class DiagnosisActivity extends AppCompatActivity {
         });
 
         getDiagnosisPlan();
+
+        mDiagnosisResultView = (RecyclerView) findViewById(R.id.content_diagnosis_list_layout);
+        setLayoutManager(new LinearLayoutManager(this));
+        final DiagnosisResultAdapter diagnosisAdapter = new DiagnosisResultAdapter(this);
+        setAdapter(diagnosisAdapter);
     }
 
     public void getDiagnosisPlan() {
@@ -66,27 +85,16 @@ public class DiagnosisActivity extends AppCompatActivity {
         mPlan = null;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_diagnosis, menu);
-        return true;
+
+    public void updateDiagnosisResult() {
+        //Drawable divider = getDrawable(R.drawable.party_divider);
+        //getRecyclerView().addItemDecoration(new HorizontalDividerItemDecoration(divider));
+        setLayoutManager(new LinearLayoutManager(this));
+        DiagnosisResultAdapter partyAdapter = new DiagnosisResultAdapter(this);
+        partyAdapter.replaceList(mDiagnosisResultList);
+        setAdapter(partyAdapter);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,6 +115,11 @@ public class DiagnosisActivity extends AppCompatActivity {
         float diagnosis = mPlan.getProbability();
         Intent intent = ResultActivity.makeIntent(this, diagnosis);
         cleanDiagnosis();
+
+        DiagnosisResult diagnosisResult = new DiagnosisResult(System.currentTimeMillis(), diagnosis);
+        mDiagnosisResultList.add(diagnosisResult);
+        updateDiagnosisResult();
+
         startActivity(intent);
     }
 
@@ -162,4 +175,8 @@ public class DiagnosisActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public RecyclerView getRecyclerView() {
+        return mDiagnosisResultView;
+    }
 }
